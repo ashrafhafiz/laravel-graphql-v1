@@ -7,56 +7,40 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# How to Build a GraphQL API Using Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ripped from original articel [How to Build a GraphQL API Using Laravel
+](https://www.freecodecamp.org/news/build-a-graphql-api-using-laravel/) by: [Tamerlan Gudabayev](Tamerlan Gudabayev)
+## Prerequisites
+Before we begin, make sure to have these installed on your system:
+- PHP 7+
+- Composer 2.0
+- Docker 20.10.6 (Any other version should be fine)
+- Docker-Compose 1.29.1 (Any other version should be fine)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+I also assume that you have:
+- Basic knowledge of Laravel (Eloquent, Migrations, MVC, Routes, and so on)
+- Knowledge of PHP (Syntax, OOP, and so on)
+- Basic knowledge of GraphQL (in theory)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## How to Initialize the Project
+Create a Laravel project using this command:
+composer create-project laravel/laravel laravel-graphql-v1
+This will create a new project in a new directory called laravel-graphql-v1.
 
-## Learning Laravel
+Moving on, if you go to localhost you should see something like this:
+<img src="https://www.freecodecamp.org/news/content/images/2021/05/2.png" alt="Build Status">
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+But before we move on, there are some packages that we need to install first:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+IDE helper for laravel, always useful to have.
+<code>composer require --dev barryvdh/laravel-ide-helper</code>
 
-## Laravel Sponsors
+GraphQL library which we are going to use
+composer require rebing/graphql-laravel
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Next we have to publish the GraphQL library like this:
+php artisan vendor:publish --provider="Rebing\\GraphQL\\GraphQLServiceProvider"
 
-### Premium Partners
+This should create a GraphQL config file that we will use in config/graphql.php.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
