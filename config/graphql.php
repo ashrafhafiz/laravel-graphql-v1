@@ -110,6 +110,7 @@ return [
             ],
             'mutation' => [
                 // ExampleMutation::class,
+                App\GraphQL\Mutation\CreateUserMutation::class,
             ],
             'types' => [
                 // ExampleType::class,

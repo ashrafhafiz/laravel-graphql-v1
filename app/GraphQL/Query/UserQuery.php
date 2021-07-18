@@ -2,10 +2,10 @@
 
 namespace App\GraphQL\Query;
 
-use Closure;
+// use Closure;
 use App\Models\User;
 use Rebing\GraphQL\Support\Facades\GraphQL;
-use GraphQL\Type\Definition\ResolveInfo;
+// use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Query;
 
