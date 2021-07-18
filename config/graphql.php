@@ -111,6 +111,11 @@ return [
             'mutation' => [
                 // ExampleMutation::class,
                 App\GraphQL\Mutation\CreateUserMutation::class,
+                App\GraphQL\Mutation\UpdateUserMutation::class,
+                App\GraphQL\Mutation\DeleteUserMutation::class,
+                App\GraphQL\Mutation\CreatePostMutation::class,
+                App\GraphQL\Mutation\UpdatePostMutation::class,
+                App\GraphQL\Mutation\DeletePostMutation::class,
             ],
             'types' => [
                 // ExampleType::class,
