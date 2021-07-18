@@ -55,60 +55,187 @@ Next we have to publish the GraphQL library like this:
 
 This should create a GraphQL config file that we will use in `config/graphql.php`.
 
+## How to Create the Migrations and Models
 
-# Markdown extensions
+This isn't a Laravel tutorial, so we'll quickly create the models with the appropriate migrations.
 
-StackEdit extends the standard Markdown syntax by adding extra **Markdown extensions**, providing you with some nice features.
+Let's start with category model:
 
-> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
+```bash
+# Create model with migrations
+php artisan make:model -m Post
 
+```
+This will create the Post model with it's migration file.
 
-## SmartyPants
+Our category will consist of four fields:
 
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
+- id
+- user_id
+- title
+- comment
+- created_at
+- updated_at
 
-|                |ASCII                          |HTML                         |
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
+Our post migrations file should look like this:
 
+```bash
+<?php
 
-## KaTeX
-
-You can render LaTeX mathematical expressions using [KaTeX](https://khan.github.io/KaTeX/):
-
-The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
-
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
-
-> You can find more information about **LaTeX** mathematical expressions [here](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference).
-
-
-## UML diagrams
-
-You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
-
-```mermaid
-sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
-
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
+use  Illuminate\Database\Migrations\Migration;
+use  Illuminate\Database\Schema\Blueprint;
+use  Illuminate\Support\Facades\Schema;
+  
+class  CreatePostsTable  extends  Migration
+{
+	/**
+	* Run the migrations.
+	*
+	* @return  void
+	*/
+	public  function  up()
+	{
+		Schema::create('posts', function (Blueprint $table) {
+			$table->id();
+			$table->bigInteger('user_id')->unsigned();
+			$table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+			$table->string('title');
+			$table->text('comment');
+			$table->timestamps();
+		});
+	}
+  
+	/**
+	* Reverse the migrations.
+	*
+	* @return  void
+	*/
+	public  function  down()
+	{
+		Schema::dropIfExists('posts');
+	}
+}
 ```
 
-And this will produce a flow chart:
+Next let's configure the post model class.
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
+We will do two things here:
+
+-   Make the fields `user_id`, `title`,`comment`  editable, so we will add it to our  `$fillable`  array.
+-   Define the relationship between post model and user model.
+```bash
+<?php
+  
+namespace  App\Models;
+  
+use  Illuminate\Database\Eloquent\Factories\HasFactory;
+use  Illuminate\Database\Eloquent\Model;
+  
+class  Post  extends  Model
+{
+	use  HasFactory;
+	  
+	protected $fillable = ['user_id', 'title', 'comment'];
+	  
+	public  function  user()
+	{
+		return  $this->belongsTo(User::class);
+	}
+}
 ```
+With both the migrations and models ready, we can apply the changes to the database.
+
+Run this command:
+
+```bash
+# Apply migrations
+sail artisan migrate
+
+```
+
+Our database should be updated! Next we should put some data into our tables.
+
+## How to Seed the Database
+
+We need data to work with, but as developers we are too lazy to manually do it.
+
+This is where factories come.
+
+First, we'll create the factory classes for both the quest and category model.
+
+Run the following commands:
+
+```bash
+# Create a factory class for quest model
+php artisan make:factory PostFactory --model=Post
+```
+
+This will create for us a new class:
+
+-   `PostFactory`  – a class that helps us generate posts.
+
+Let's start with the  `PostFactory`. In our  `definitions`  function we will tell Laravel how each field should be generated. For the field  `user_id`, we will pick a random user.
+```bash
+<?php
+  
+namespace  Database\Factories;
+  
+use  App\Models\Post;
+use  App\Models\User;
+use  Illuminate\Database\Eloquent\Factories\Factory;
+  
+class  PostFactory  extends  Factory
+{
+	/**
+	* The name of the factory's corresponding model.
+	*
+	* @var  string
+	*/
+	protected $model = Post::class;
+	  
+	/**
+	* Define the model's default state.
+	*
+	* @return  array
+	*/
+	public  function  definition()
+	{
+		$userIDs = User::all()->pluck('id')->toArray();
+		return [
+			// 'user_id' => rand(1, 10),
+			// 'title' => $this->faker->title(),
+			// 'title' => $this->faker->name(),
+			'user_id' => $this->faker->randomElement($userIDs),
+			'title' => $this->faker->realText(25),
+			'comment' => $this->faker->realText(180)
+		];
+	}
+}
+```
+`UserFactory` is much simpler, as we simply have to execute it, since it is automatically generated while creating the Laravel project.
+
+Now instead of creating seeders, we will simply run the factory create method inside `DatabaseSeeder.php`:
+```bash
+<?php
+  
+namespace  Database\Seeders;
+  
+use  Illuminate\Database\Seeder;
+  
+class  DatabaseSeeder  extends  Seeder
+{
+	/**
+	* Seed the application's database.
+	*
+	* @return  void
+	*/
+	public  function  run()
+	{
+		\App\Models\User::factory(10)->create();
+		\App\Models\Post::factory(10)->create();
+	}
+}
+```
+
+
+
