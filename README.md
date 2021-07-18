@@ -10,7 +10,7 @@
 # How to Build a GraphQL API Using Laravel
 
 ripped from original articel [How to Build a GraphQL API Using Laravel
-](https://www.freecodecamp.org/news/build-a-graphql-api-using-laravel/) by: [Tamerlan Gudabayev](Tamerlan Gudabayev)
+](https://www.freecodecamp.org/news/build-a-graphql-api-using-laravel/) by: [Tamerlan Gudabayev](https://www.freecodecamp.org/news/author/tamerlan/)
 ## Prerequisites
 Before we begin, make sure to have these installed on your system:
 - PHP 7+
@@ -29,15 +29,18 @@ composer create-project laravel/laravel laravel-graphql-v1
 This will create a new project in a new directory called laravel-graphql-v1.
 
 Moving on, if you go to localhost you should see something like this:
+
 <img src="https://www.freecodecamp.org/news/content/images/2021/05/2.png" alt="Build Status">
 
 But before we move on, there are some packages that we need to install first:
 
-IDE helper for laravel, always useful to have.
+- IDE helper for laravel, always useful to have.
+
 <code>composer require --dev barryvdh/laravel-ide-helper</code>
 
-GraphQL library which we are going to use
-composer require rebing/graphql-laravel
+- GraphQL library which we are going to use:
+
+<code>composer require rebing/graphql-laravel</code>
 
 Next we have to publish the GraphQL library like this:
 php artisan vendor:publish --provider="Rebing\\GraphQL\\GraphQLServiceProvider"
