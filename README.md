@@ -240,17 +240,19 @@ At this point we are ready to create our GraphQL APIs. To do that let's first cr
 
 Inside the GraphQL folder, create three new folders:
 
--   Mutation or Mutations
--   Query | Queries
--   Type | Types
+-   Mutation
+-   Query
+-   Type
 
 It will look something like this:
+
 ![enter image description here](https://lh3.googleusercontent.com/qeNxdtfCjXLUft8vQv1AXJEVMMpKmy4C0xaoZARjEfadZmlHeq6fcGCzP8-_s7PP7cXHCJ_QPQHwu5wI8rqz2o0dbP5xe1zgRf6C8tAQOGtRX8cd9zH4pps9EPJ8yRwrklltklPH7KhSFAvDaojQs1IDAGnDg27A4S0wYhAE_wGPz8rHgbTt3Jz4JwB-iRQiNlsCYUsURlVeMlVj48lFE4Ne2dCFtU1-jsqv_xUnijGuzmCNste58Ya4f1HvuoBN6zikcUNqt_BE77ezFZixyht9o01yZaDgJVezA58EvzNLBNfERioWNDuzazOBKN5Fnhj9v1duLOMqn3DG01-lCKdkMV5rdsA3LT8W750PkdfyAJxk_kE0JU26Edo1_LEHLGT7y2Exq2uCAIbYoUoRn2mHU6nyjt2JieM1lbTyl93i0MLVeUvVYbRdO9f7qQzDDUOn_n3y_cdLMsL8RfFmGCgQ-X_VQ2bBc7xLIutvtPas3h-6GVHniPJGhesDnwOBiq4z2-FIS7fv2oChnjLlLHQfX0YXfg1vEMZiFfkriv65tHl176eAzIzPcpIDB9pUxJOydcx9Vm1L6qlwEbj4GAEuH9cR4dgg2_b2I6aR1TJuEg9wydF5BYZ3EjVfDU9skDBfgG274tn3VlFCRX7u5NRG-AaTDo8nzkDDlWO32DBO8pB4TkXfu7xA9ajmqa8RQMPyKh5FTNtldYE54rUyaVPr=w376-h506-no?authuser=0)
+
 This is where the bulk of our code will be. As you might be able to tell, it's very different from REST architecture. Before we begin writing the code, let me quickly explain the purpose of each folder.
 
--   **Mutation|Mutations**: This folder will contain classes that manage the insert, update, and delete operations.
--   **Query|Queries**: This folder will contain the classes that fetch data from the database.
--   **Type|Types**: You can think of this as a model, or a model resource. Basically types are objects that can be fetched from the database. For example, we are going to have a  `PostType`  and a  `UserType`.
+-   **Mutation**: This folder will contain classes that manage the insert, update, and delete operations.
+-   **Query**: This folder will contain the classes that fetch data from the database.
+-   **Type**: You can think of this as a model, or a model resource. Basically types are objects that can be fetched from the database. For example, we are going to have a  `PostType`  and a  `UserType`.
 
 ## How to Define the Category and Quest Types
 
