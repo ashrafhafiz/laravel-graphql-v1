@@ -8,9 +8,7 @@
 
   
 
-# How to Build a GraphQL API Using Laravel
-
-  
+# How to Build a GraphQL API Using Laravel & [rebing](https://github.com/rebing)/[graphql-laravel](https://github.com/rebing/graphql-laravel)
 
 Ripped from original articel [How to Build a GraphQL API Using Laravel
 ](https://www.freecodecamp.org/news/build-a-graphql-api-using-laravel/) by: [Tamerlan Gudabayev](https://www.freecodecamp.org/news/author/tamerlan/)
@@ -19,56 +17,58 @@ Ripped from original articel [How to Build a GraphQL API Using Laravel
 Before we begin, make sure to have these installed on your system:
 - PHP 7+
 - Composer 2.0
-- Docker 20.10.6 (Any other version should be fine)
-- Docker-Compose 1.29.1 (Any other version should be fine)
   
 I also assume that you have:
 - Basic knowledge of Laravel (Eloquent, Migrations, MVC, Routes, and so on)
 - Knowledge of PHP (Syntax, OOP, and so on)
 - Basic knowledge of GraphQL (in theory)
 
+## What We're Going to Build
+
+The project will consist of only two models called  **User**  and  **Post**.
+
+By the end of this post we will create a CRUD GraphQL API for each model.
+
+![enter image description here](https://lh3.googleusercontent.com/WCVjg8qtQoE1eM7SKCD8f7JuEsgyflx9DFXdpBNxuZdfxoksvxA5diqH4Wmlw9fce6lNEgQP-tsmw6ghddH526S4v1D6mDNTo-PHODD77alzBjHyn4wPdY3PBH_WH3MITZsHjiDMznPSnnb4pm-ar76CT6osjQm9dDadV5OurrEZ7SjDEAw0lJziMLVgOvOP8b-j8UK0zLRhB9GVQwFLc-qe9i8XFuE8IbGihx1fhyJkE5fjt0hviWPKj_4JIFwHTWjATO5UPpK-h7n1w6b8tsBMDGXaxr1K4NzCyzD5coOcyBvnaLyZsfhoyx5wQlpq80g3NKyyf52WF1RNt4aupfx1qRBXwOjWFF-Asfd9eMaiC5oNUZPhl4bHQLIOamZfWLSK-Vh0UPYpHRi7mp4PsthfqC2szIiidbTU7RA9BIsQnKV5Tf8WTaytN_0ZA4nCX0zP0KLcQNfbbM2S0jMZdiy6ygdol_YE-f5k6udGTMejaOCd1Ln9vnQnLBq4lAs7BP4q8NXy4JF27iU4wkfxQ1bA4pC2KQVxPc57IazPOoENpWqX_SPtjX19I2JDLfuGS0EFEBkgQkqYWKfRspxHlPoOUr8EehMGboli8eNxlXPq8CAxJBeK2YvWkk-PX4p_dFyzNbWZbaGS9mVleCGy-xQVpu62xh0ZggXRnPc2Y9HwcAecP9ZwY2mPQ-frQxW5nG7ggDgOy4Pu8ky3vv_lmPNX=w503-h311-no?authuser=0)
+
+
 ## How to Initialize the Project
 Create a Laravel project using this command:
-
-    composer create-project laravel/laravel laravel-graphql-v1
-
+```bash
+composer create-project laravel/laravel laravel-graphql-v1
+```
 This will create a new project in a new directory called `laravel-graphql-v1`.
 
 Moving on, if you go to localhost you should see something like this:
 
 <img  src="https://www.freecodecamp.org/news/content/images/2021/05/2.png"  alt="Build Status">
 
-  
-
 But before we move on, there are some packages that we need to install first:
  - IDE helper for laravel, always useful to have.
-
-    composer require --dev barryvdh/laravel-ide-helper
-
+	```bash
+	composer require --dev barryvdh/laravel-ide-helper
+	```
  - GraphQL library which we are going to use:
-
-    composer require rebing/graphql-laravel
-
+	```bash
+	composer require rebing/graphql-laravel
+	```
 Next we have to publish the GraphQL library like this:
-
-    php artisan vendor:publish --provider="Rebing\\GraphQL\\GraphQLServiceProvider"
-
+```bash
+php artisan vendor:publish --provider="Rebing\GraphQL\GraphQLServiceProvider"
+```
 This should create a GraphQL config file that we will use in `config/graphql.php`.
 
 ## How to Create the Migrations and Models
 
 This isn't a Laravel tutorial, so we'll quickly create the models with the appropriate migrations.
 
-Let's start with category model:
-
+Since we have a User model created by default with the project creating, let's create Post model:
 ```bash
-# Create model with migrations
 php artisan make:model -m Post
-
 ```
 This will create the Post model with it's migration file.
 
-Our category will consist of four fields:
+Our Post will consist of six fields:
 
 - id
 - user_id
@@ -122,7 +122,7 @@ Next let's configure the post model class.
 We will do two things here:
 
 -   Make the fields `user_id`, `title`,`comment`  editable, so we will add it to our  `$fillable`  array.
--   Define the relationship between post model and user model.
+-   Define the relationship between Post model and User model.
 ```bash
 <?php
   
@@ -145,13 +145,10 @@ class  Post  extends  Model
 ```
 With both the migrations and models ready, we can apply the changes to the database.
 
-Run this command:
-
+*Run this command:*
 ```bash
-# Apply migrations
 php artisan migrate
 ```
-
 Our database should be updated! Next we should put some data into our tables.
 
 ## How to Seed the Database
@@ -162,13 +159,10 @@ This is where factories come.
 
 First, we'll create the factory classes for both the quest and category model.
 
-Run the following commands:
-
+*Run the following commands:*
 ```bash
-# Create a factory class for quest model
 php artisan make:factory PostFactory --model=Post
 ```
-
 This will create for us a new class:
 
 -   `PostFactory`  – a class that helps us generate posts.
@@ -236,10 +230,8 @@ class  DatabaseSeeder  extends  Seeder
 }
 ```
 Finally run the command to seed the database.
-
 ```php
-sail artisan db:seed
-
+php artisan db:seed
 ```
 
 ## Folder Structure
@@ -253,9 +245,7 @@ Inside the GraphQL folder, create three new folders:
 -   Type | Types
 
 It will look something like this:
-
-![](https://www.freecodecamp.org/news/content/images/2021/05/3.png)
-
+![enter image description here](https://lh3.googleusercontent.com/qeNxdtfCjXLUft8vQv1AXJEVMMpKmy4C0xaoZARjEfadZmlHeq6fcGCzP8-_s7PP7cXHCJ_QPQHwu5wI8rqz2o0dbP5xe1zgRf6C8tAQOGtRX8cd9zH4pps9EPJ8yRwrklltklPH7KhSFAvDaojQs1IDAGnDg27A4S0wYhAE_wGPz8rHgbTt3Jz4JwB-iRQiNlsCYUsURlVeMlVj48lFE4Ne2dCFtU1-jsqv_xUnijGuzmCNste58Ya4f1HvuoBN6zikcUNqt_BE77ezFZixyht9o01yZaDgJVezA58EvzNLBNfERioWNDuzazOBKN5Fnhj9v1duLOMqn3DG01-lCKdkMV5rdsA3LT8W750PkdfyAJxk_kE0JU26Edo1_LEHLGT7y2Exq2uCAIbYoUoRn2mHU6nyjt2JieM1lbTyl93i0MLVeUvVYbRdO9f7qQzDDUOn_n3y_cdLMsL8RfFmGCgQ-X_VQ2bBc7xLIutvtPas3h-6GVHniPJGhesDnwOBiq4z2-FIS7fv2oChnjLlLHQfX0YXfg1vEMZiFfkriv65tHl176eAzIzPcpIDB9pUxJOydcx9Vm1L6qlwEbj4GAEuH9cR4dgg2_b2I6aR1TJuEg9wydF5BYZ3EjVfDU9skDBfgG274tn3VlFCRX7u5NRG-AaTDo8nzkDDlWO32DBO8pB4TkXfu7xA9ajmqa8RQMPyKh5FTNtldYE54rUyaVPr=w376-h506-no?authuser=0)
 This is where the bulk of our code will be. As you might be able to tell, it's very different from REST architecture. Before we begin writing the code, let me quickly explain the purpose of each folder.
 
 -   **Mutation|Mutations**: This folder will contain classes that manage the insert, update, and delete operations.
@@ -389,9 +379,7 @@ Let's create our classes:
 -   `PostQuery`
 -   `PostsQuery`
 
-Your file structure should look like this:
-
-![](https://www.freecodecamp.org/news/content/images/2021/05/4.png)
+The file structure should look like as show above.
 
 Let's start with the  `UserQuery`  class:
 
@@ -654,9 +642,7 @@ Let's create our mutation classes:
 -   `DeletePostMutation`
 -   `UpdatePostMutation`
 
-Your file structure should look like this:
-
-![](https://www.freecodecamp.org/news/content/images/2021/05/5.png)
+The file structure should look like as shown above.
 
 Let's start with  `CreateUserMutation`:
 ```bash
@@ -712,64 +698,78 @@ class  CreateUserMutation  extends  Mutation
 	}
 }
 ```
+## Schemas
 
+All the hard work is done! Now we have to put everything together.
 
+We have to register our queries, mutations, and types in our  `config/graphql`:
 
-
-
-# Markdown extensions
-
-StackEdit extends the standard Markdown syntax by adding extra **Markdown extensions**, providing you with some nice features.
-
-> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
-
-
-## SmartyPants
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                |ASCII                          |HTML                         |
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
-
-
-## KaTeX
-
-You can render LaTeX mathematical expressions using [KaTeX](https://khan.github.io/KaTeX/):
-
-The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
-
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
-
-> You can find more information about **LaTeX** mathematical expressions [here](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference).
-
-
-## UML diagrams
-
-You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
-
-```mermaid
-sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
-
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
+```
+<?php
+  
+declare(strict_types=1);
+  
+return [
+	...
+	...
+	...
+	'schemas' => [
+		'default' => [
+			'query' => [
+				App\GraphQL\Query\UserQuery::class,
+				App\GraphQL\Query\PostQuery::class,
+				App\GraphQL\Query\UsersQuery::class,
+				App\GraphQL\Query\PostsQuery::class,
+			],
+			'mutation' => [
+				App\GraphQL\Mutation\CreateUserMutation::class,
+				App\GraphQL\Mutation\UpdateUserMutation::class,
+				App\GraphQL\Mutation\DeleteUserMutation::class,
+				App\GraphQL\Mutation\CreatePostMutation::class,
+				App\GraphQL\Mutation\UpdatePostMutation::class,
+				App\GraphQL\Mutation\DeletePostMutation::class,
+			],
+			'types' => [
+			],
+			'middleware' => [],
+			'method' => ['get', 'post'],
+		],
+	],
+	...
+	...
+	...
+	'types' => [
+		App\GraphQL\Type\UserType::class,
+		App\GraphQL\Type\PostType::class,
+	],
+	...
+	...
+	...
+];
 ```
 
-And this will produce a flow chart:
+Now that all that's done, let's try out our APIs.
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
-```
+## How to Test the Queries
+
+Our GraphQL library provides us with an IDE.
+
+So make sure your Docker containers are running and head into  [http://localhost/graphiql](http://localhost/graphiql).
+
+You should see something like this:
+
+![](https://www.freecodecamp.org/news/content/images/2021/05/6.png)
+
+## Conclusion
+
+Congratulations, you have created your first GraphQL API.
+
+In summary:
+
+-   A GraphQL API consists of three parts: Queries, Types, and Mutations.
+-   Mutations manage your CRUD operations.
+-   Queries fetch from the database.
+-   Types are the model resource that gets returned to the client.
+
+Thank you for reading!
+

@@ -41,6 +41,7 @@ class DeleteUserMutation extends Mutation
 
     public function resolve($root, $args)
     {
+
         if (isset($args['id'])) {
             $user = User::whereId($args['id'])->get()->first();
         }
@@ -52,7 +53,9 @@ class DeleteUserMutation extends Mutation
         if (isset($args['email'])) {
             $user =  User::whereEmail($args['email'])->get()->first();
         }
-
+        if (!$user) {
+            return null;
+        }
         $user->delete();
         return $user;
     }
